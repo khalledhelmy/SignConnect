@@ -6,6 +6,11 @@ from PIL import Image
 from mediapipe_utils import MediaPipeProcessor
 import time
 import io
+import soundfile as sf
+import numpy as np
+import requests
+
+st.title('SignConnect')
 
 cooldown = 0.45
 flash_duration = 0.35
@@ -20,11 +25,11 @@ PROCESS_INTERVAL = 0.5
 last_process_time = 0
 
 
-st.title("ASL Live Detection via API")
-API_URL = "http://127.0.0.1:8000/stt/predict"
+st.write("ASL")
+API_URL = "https://8000-01kb8hcty9d4xc1v0s3m5zz6ya.cloudspaces.litng.ai//stt/predict"
 
 mp_processor = MediaPipeProcessor()
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 frame_window = st.image([])
 run_cam = st.button("Start Camera")
 placeholder = st.empty()
@@ -107,3 +112,29 @@ while run_cam:
 
 
     frame_window.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+
+
+st.write('Upload an audio file to get its transcription.')
+
+uploaded_file = st.file_uploader("Choose an audio file", 
+                                 type=["wav", "mp3", "flac", "m4a", "aac", "ogg", "wma"])
+
+ASR_URL = "https://8000-01kb8hcty9d4xc1v0s3m5zz6ya.cloudspaces.litng.ai/asr/transcribe"
+
+if uploaded_file is not None:
+    st.audio(uploaded_file)
+    audio_bytes = uploaded_file.read()
+
+    if st.button('Transcribe'):
+        with st.spinner('Transcribing...'):
+            files = {'file': (uploaded_file.name, audio_bytes, uploaded_file.type)}
+
+            response = requests.post(ASR_URL, files=files)
+
+            if response.status_code == 200:
+                result = response.json()
+
+                st.success('Transcription completed!')
+                st.text_area('Trascription', result.get('transcription', ''), height=200)
+            else:
+                st.error('Error during transcription. Please try again.' + response.text)
