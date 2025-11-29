@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import stt_router
+from routes import asr_router, stt_router
 from helpers.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,7 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# app.include_router(asr_router)
+app.include_router(asr_router)
 app.include_router(stt_router)
 
 @app.get('/')
