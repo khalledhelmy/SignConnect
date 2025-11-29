@@ -18,11 +18,4 @@ class Settings(BaseSettings):
     HF_TOKEN: str
     HF_CACHE_DIR: str
 
-    MODEL_PATH : str
-
-    PROCESS_INTERVAL : float
-    VOTE_REQUIRED : float
-    COOLDOWN : float
-    FLASH_DURATION : float
-
 settings = Settings()
