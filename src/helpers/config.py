@@ -17,5 +17,16 @@ class Settings(BaseSettings):
     # HuggingFace Authentication
     HF_TOKEN: str
     HF_CACHE_DIR: str
+    
+    #Fine-tuned tts Model Settings
+    BASE_MODEL_tts : str
+    VOCODER_MODEL_tts : str
+    SPEAKER_INDEX : int
+
+    # HuggingFace Authentication for tts
+    HF_CACHE_DIR_tts : str
+    HF_TOKEN_tts : str
+
+
 
 settings = Settings()

@@ -14,3 +14,7 @@ mediapipe==0.10.13
 Pillow==9.5.0
 streamlit==1.27.0
 torchvision==0.24.1
+datasets==2.17.1
+IPython==7.34.0
+sentencepiece==0.1.99
+librosa==0.11.0

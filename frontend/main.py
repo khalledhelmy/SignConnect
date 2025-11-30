@@ -135,3 +135,24 @@ if uploaded_file is not None:
                 st.text_area('Trascription', result.get('transcription', ''), height=200)
             else:
                 st.error('Error during transcription. Please try again.' + response.text)
+
+
+
+TTS_URL = "http://127.0.0.1:8000/tts/Audio"
+
+user_text = st.text_input("Enter text to generate speech audio")
+
+if st.button("Generate Audio"):
+    if not user_text.strip():
+        st.warning("Please enter the text.")
+    else:
+        # Send text as query parameter
+        params = {"text": user_text}
+
+        response = requests.post(TTS_URL, params=params)
+
+        if response.status_code == 200:
+            audio_bytes = response.content
+            st.audio(audio_bytes, format="audio/wav")
+        else:
+            st.error("Error: " + response.text)
