@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from controller import TTSController
 from models import TTSOutput
+import numpy as np
 import io
 import soundfile as sf
 
@@ -11,6 +12,7 @@ tts_controller = TTSController()
 @tts_router.post("/Audio")
 async def synthesize_text(text: str):
     audio_array, sr = tts_controller.synthesize(text)
+    audio_array = audio_array.astype(np.float32)
     wav_io = io.BytesIO()
     sf.write(wav_io, audio_array, sr, format="WAV")
     wav_io.seek(0)
